@@ -55,11 +55,11 @@
     }
 
     .tabs-active {
-        @apply bg-accent;
+        @apply bg-amber-800;
     }
 
     .tabs-glyph {
-        @apply size-6;
+        @apply size-10;
     }
 
     .home-header {
