@@ -55,11 +55,11 @@
     }
 
     .tabs-active {
-        @apply bg-amber-800;
+        @apply bg-accent;
     }
 
     .tabs-glyph {
-        @apply size-10;
+        @apply size-8;
     }
 
     .home-header {
@@ -79,7 +79,7 @@
     }
 
     .home-add-icon {
-        @apply size-12;
+        @apply size-8;
     }
 
     .home-balance-card {
