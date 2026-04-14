@@ -32,7 +32,7 @@ const SubscriptionCard = ({name, price, billing, category, plan, renewalDate, ic
                             <Text className='sub-label'>Payment:</Text>
                             <Text numberOfLines={1} ellipsizeMode='tail'
                                   className='sub-value'>
-                                {paymentMethod?.trim()}
+                                {paymentMethod?.trim() ?? 'Not provided'}
                             </Text>
                         </View>
                     </View>
