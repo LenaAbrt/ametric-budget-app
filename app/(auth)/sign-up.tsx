@@ -87,24 +87,13 @@ export default function SignUpScreen() {
             
             if (signUp.status === 'complete') {
                 await signUp.finalize({
-                    navigate: ({ session, decorateUrl }) => {
+                    navigate: ({ session }) => {
                         if (session?.currentTask) {
                             console.log(session?.currentTask)
                             return
                         }
 
-                        const url = decorateUrl('/(tabs)')
-                        if (url.startsWith('http')) {
-                            // Check for web environment before using window.location.href
-                            if (typeof window !== 'undefined') {
-                                window.location.href = url
-                            } else {
-                                // Use Linking.openURL for native environment
-                                Linking.openURL(url)
-                            }
-                        } else {
-                            router.replace(url as any)
-                        }
+                        router.replace('/(tabs)/index')
                     },
                 })
             } else {
