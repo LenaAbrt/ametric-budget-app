@@ -12,7 +12,7 @@ const StyledView = styled(View)
 const StyledText = styled(Text)
 const StyledPressable = styled(Pressable)
 
-export default function OnboardingScreen() {
+export default function Settings() {
     const { user } = useUser()
     const { signOut } = useClerk()
     const insets = useSafeAreaInsets()

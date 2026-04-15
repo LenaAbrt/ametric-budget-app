@@ -1,6 +1,6 @@
 import "@/global.css"
-import {FlatList, Image, Text, View} from "react-native";
-import {Link} from "expo-router";
+import {FlatList, Image, Text, View, Pressable} from "react-native";
+import {Link, useRouter} from "expo-router";
 import {styled} from 'nativewind';
 import {SafeAreaView as RNSafeAreaView} from "react-native-safe-area-context";
 import images from "@/constants/images";
@@ -11,19 +11,32 @@ import dayjs from "dayjs";
 import ListHeading from "@/components/ListHeading";
 import UpcomingSubscriptionCard from "@/components/UpcomingSubscriptionCard";
 import SubscriptionCard from "@/components/SubscriptionCard";
+import CreateSubscriptionModal from "@/components/CreateSubscriptionModal";
 import {useState} from "react";
 import {useUser} from "@clerk/expo";
+import {useSubscriptions} from "../../context/SubscriptionsContext";
 
 const SafeAreaView = styled(RNSafeAreaView)
-export default function App() {
+export default function Index() {
     const { user } = useUser()
+    const router = useRouter()
     const [expandedSubscriptionIs, setExpandedSubscriptionId] = useState<string | null>(null);
+    const [showCreateModal, setShowCreateModal] = useState(false);
+    const { subscriptions, addSubscription } = useSubscriptions();
     
     const displayName = user?.firstName || user?.emailAddresses[0]?.emailAddress?.split('@')[0] || 'User'
     
+    const handleViewAllSubscriptions = () => {
+        router.push('/(tabs)/subscriptions');
+    };
+    
+    const handleCreateSubscription = (newSubscription: Subscription) => {
+        addSubscription(newSubscription);
+    };
+    
     return (
         <SafeAreaView className='flex-1 bg-background p-5'>
-                <FlatList data={HOME_SUBSCRIPTIONS}
+                <FlatList data={subscriptions}
                           ListHeaderComponent={()=>(
                               <>
                                   <View className='home-header'>
@@ -32,7 +45,9 @@ export default function App() {
                                           <Text className='home-user-name'>{displayName}</Text>
                                       </View>
 
-                                      <Image source={icons.add} className='home-add-icon'/>
+                                      <Pressable onPress={() => setShowCreateModal(true)}>
+                                          <Image source={icons.add} className='home-add-icon'/>
+                                      </Pressable>
                                   </View>
 
                                   <View className='home-balance-card'>
@@ -66,7 +81,7 @@ export default function App() {
                                       />
                                   </View>
 
-                                  <ListHeading title='All Subscriptions'/>
+                                  <ListHeading title='All Subscriptions' onPress={handleViewAllSubscriptions}/>
 
                               </>
                           )}
@@ -91,6 +106,11 @@ export default function App() {
                           contentContainerClassName='pb-20'
                 />
 
+                <CreateSubscriptionModal
+                    visible={showCreateModal}
+                    onClose={() => setShowCreateModal(false)}
+                    onSubmit={handleCreateSubscription}
+                />
         </SafeAreaView>
     );
 }

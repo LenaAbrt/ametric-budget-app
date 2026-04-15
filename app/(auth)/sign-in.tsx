@@ -55,28 +55,22 @@ export default function SignInScreen() {
                 return
             }
 
+            console.log('Sign-in status:', signIn.status)
             if (signIn.status === 'complete') {
+                console.log('Sign-in is complete, finalizing...')
                 await signIn.finalize({
-                    navigate: ({ session, decorateUrl }) => {
+                    navigate: ({ session }) => {
+                        console.log('Navigate callback called, session:', session?.status)
                         if (session?.currentTask) {
-                            console.log(session?.currentTask)
+                            console.log('Session has current task:', session?.currentTask)
                             return
-                        }
-
-                        const url = decorateUrl('/(tabs)')
-                        if (url.startsWith('http')) {
-                            // Check for web environment before using window.location.href
-                            if (typeof window !== 'undefined') {
-                                window.location.href = url
-                            } else {
-                                // Use Linking.openURL for native environment
-                                Linking.openURL(url)
-                            }
-                        } else {
-                            router.replace(url as any)
                         }
                     },
                 })
+                
+                // Navigate outside of Clerk callback
+                console.log('Navigating outside of callback to: /')
+                router.replace('/')
             } else if (signIn.status === 'needs_second_factor') {
                 // Handle MFA
                 const emailCodeFactor = signIn.supportedSecondFactors.find(
@@ -118,24 +112,13 @@ export default function SignInScreen() {
 
             if (signIn.status === 'complete') {
                 await signIn.finalize({
-                    navigate: ({ session, decorateUrl }) => {
+                    navigate: ({ session }) => {
                         if (session?.currentTask) {
                             console.log(session?.currentTask)
                             return
                         }
 
-                        const url = decorateUrl('/(tabs)')
-                        if (url.startsWith('http')) {
-                            // Check for web environment before using window.location.href
-                            if (typeof window !== 'undefined') {
-                                window.location.href = url
-                            } else {
-                                // Use Linking.openURL for native environment
-                                Linking.openURL(url)
-                            }
-                        } else {
-                            router.replace(url as any)
-                        }
+                        router.replace('/(tabs)/index')
                     },
                 })
             } else {

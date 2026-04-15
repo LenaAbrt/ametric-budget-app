@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Image } from 'react-native';
 import {Tabs, Redirect} from "expo-router";
 import {tabs} from "@/constants/data";
+import {icons} from "@/constants/icons";
 import clsx from "clsx";
 import {useSafeAreaInsets} from "react-native-safe-area-context";
 import {colors, components} from "@/constants/theme";
@@ -54,7 +55,15 @@ const TabsLayout = () => {
                 alignSelf: 'center',
             }
         }}>
-            {tabs.map((tab) => (
+            <Tabs.Screen 
+                name="index"
+                options={{
+                    title: 'Home',
+                    tabBarIcon: ({focused}) => (
+                       <TabIcon focused={focused} icon={icons.home}/>
+                    )
+                }}/>
+            {tabs.filter(tab => tab.name !== 'index').map((tab) => (
                 <Tabs.Screen key={tab.name}
                              name={tab.name}
                              options={{
@@ -66,8 +75,7 @@ const TabsLayout = () => {
 
             ))}
 
-            <Tabs.Screen name="subscriptions/[id]" options={{href: null}}/>
-
+            
         </Tabs>
     )
 }
